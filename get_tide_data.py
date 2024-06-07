@@ -36,6 +36,10 @@ def convert_tide_data_to_pcal(tide_data_filename, pcal_filename):
             # Format the date for pcal (mm/dd)
             pcal_date = f"{int(month)}/{int(day)}"
             
+            if prediction < 0.3:
+                # add an asterisk to the pcal_date if the tide is less than 1.0
+                pcal_date += "*"
+            
             # Write the event to the pcal file
             # Including time and tide type in the event description
             pcal_file.write(f"{pcal_date}  {time} {tide_type_full} {prediction} m\n")
@@ -107,7 +111,7 @@ if __name__ == "__main__":
     # print("https://manpages.debian.org/testing/pcal/pcal.1.en.html")
 
     # Call the shell command to create the calendar page
-    subprocess.run(["pcal", "-f", pcal_filename, "-o", pcal_filename.replace('.txt', '.ps'), "-m", "-S", str(args.month), str(args.year)])
+    subprocess.run(["pcal", "-f", pcal_filename, "-o", pcal_filename.replace('.txt', '.ps'), "-s 1.0:0.0:0.0", "-m", "-S", str(args.month), str(args.year)])
 
     # Convert the PostScript file to PDF
     subprocess.run(["ps2pdf", pcal_filename.replace('.txt', '.ps'), pcal_filename.replace('.txt', '.pdf')])
