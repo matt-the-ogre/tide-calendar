@@ -3,7 +3,6 @@ import requests
 from datetime import datetime
 import calendar
 import subprocess
-import subprocess
 
 # sample call: python get_tide_data.py --station_id 9449639 --year 2024 --month 6
 
