@@ -1,6 +1,6 @@
-# Tide data retrieval
+# Print a tide calendar for a location
 
-A python program to retrieve tide data for a station, year, and month.
+A python program to retrieve tide data for a station, year, and month then create a calendar page (or pages) using `pcal`.
 
 ## Virtual environment
 
@@ -73,13 +73,13 @@ pip install requests
 Now, navigate to the directory where your script is located (if you're not already there) and run it using Python. Assuming your script is named `script_name.py`:
 
 ```bash
-python script_name.py
+python get_tide_data.py
 ```
 
 And if you're using command line arguments:
 
 ```bash
-python script_name.py --station_id 9449639 --year 2024 --month 6
+python get_tide_data.py --station_id 9449639 --year 2024 --month 6
 ```
 
 ### Step 6: Deactivate the Virtual Environment
@@ -96,5 +96,3 @@ This returns you to the system's default Python interpreter.
 
 - **Organizing Projects**: Keep each of your Python projects in separate directories with their own virtual environments to manage dependencies effectively.
 - **Requirements File**: If your project depends on multiple packages, consider creating a `requirements.txt` file listing all your dependencies. You can then install all of them at once using `pip install -r requirements.txt`.
-
-By following these steps, you should have a fully functional virtual environment for running your Python projects without affecting the rest of your system's setup.
