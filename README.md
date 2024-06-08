@@ -2,6 +2,52 @@
 
 A python program to retrieve tide data for a station, year, and month then create a calendar page (or pages) using `pcal`.
 
+## Quick start
+
+Install `pcal` (example uses brew on MacOS):
+
+```bash
+brew install pcal
+```
+
+Run this:
+
+```bash
+python3 -m venv tide-env
+source tide-env/bin/activate
+pip install requests
+```
+
+Then this, replacing the tide station, year, and month with your choices:
+
+```bash
+python3 get_tide_data.py --station_id 9449639 --year 2024 --month 6
+```
+
+You'll see a new PDF file created in the same directory with the tide calendar.
+
+After you're finished making calendars, run this to clean up:
+
+```bash
+deactivate
+```
+
+If you want tide calendars for June through December 2024, run this complete script:
+
+```bash
+python3 -m venv tide-env
+source tide-env/bin/activate
+pip install requests
+python3 get_tide_data.py --station_id 9449639 --year 2024 --month 6
+python3 get_tide_data.py --station_id 9449639 --year 2024 --month 7
+python3 get_tide_data.py --station_id 9449639 --year 2024 --month 8
+python3 get_tide_data.py --station_id 9449639 --year 2024 --month 9
+python3 get_tide_data.py --station_id 9449639 --year 2024 --month 10
+python3 get_tide_data.py --station_id 9449639 --year 2024 --month 11
+python3 get_tide_data.py --station_id 9449639 --year 2024 --month 12
+deactivate
+```
+
 ## Virtual environment
 
 `python3 -m venv tide-env`
@@ -79,7 +125,7 @@ python get_tide_data.py
 And if you're using command line arguments:
 
 ```bash
-python get_tide_data.py --station_id 9449639 --year 2024 --month 6
+python3 get_tide_data.py --station_id 9449639 --year 2024 --month 6
 ```
 
 ### Step 6: Deactivate the Virtual Environment

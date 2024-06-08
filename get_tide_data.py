@@ -3,6 +3,7 @@ import requests
 from datetime import datetime
 import calendar
 import subprocess
+import logging
 
 # sample call: python get_tide_data.py --station_id 9449639 --year 2024 --month 6
 
@@ -35,8 +36,9 @@ def convert_tide_data_to_pcal(tide_data_filename, pcal_filename):
             # Format the date for pcal (mm/dd)
             pcal_date = f"{int(month)}/{int(day)}"
             
-            if prediction < 0.3:
-                # add an asterisk to the pcal_date if the tide is less than 1.0
+            if prediction < 1.0:
+                # add an asterisk to the pcal_date if the tide is less than 1.0 meter
+                # this indicates the day is special to pcal and it will be colour-coded
                 pcal_date += "*"
             
             # Write the event to the pcal file
@@ -71,11 +73,14 @@ def download_tide_data(station_id, year, month):
         filename = f"{station_id}_{year}_{month:02d}.csv"
         with open(filename, 'wb') as file:
             file.write(response.content)
-        print(f"Data successfully saved to {filename}")
+        logging.debug(f"Data successfully saved to {filename}")
     else:
-        print(f"Failed to download data: {response.status_code}")
+        logging.error(f"Failed to download data: {response.status_code}")
 
 if __name__ == "__main__":
+    # Set up logging
+    logging.basicConfig(level=logging.INFO)
+
     parser = argparse.ArgumentParser(description="Download tide data as CSV.")
     parser.add_argument('--station_id', type=str, default='9449639', help='Station ID (default: 9449639)')
     parser.add_argument('--year', type=int, default=datetime.now().year, help='Year (default: current year)')
@@ -85,7 +90,7 @@ if __name__ == "__main__":
 
     # Ensure month is in the correct format
     if args.month < 1 or args.month > 12:
-        print("Month must be between 1 and 12")
+        logging.error("Month must be between 1 and 12")
     else:
         download_tide_data(args.station_id, args.year, args.month)
 
@@ -96,7 +101,7 @@ if __name__ == "__main__":
     
     convert_tide_data_to_pcal(downloaded_filename, pcal_filename)
 
-    print(f"PCAL file created: {pcal_filename}")
+    logging.debug(f"PCAL file created: {pcal_filename}")
 
     # now make a calendar page using `pcal` and the pcal file with the tide events for that month and year
     # print("To create a calendar page with the tide events, run the following command:")
@@ -115,8 +120,13 @@ if __name__ == "__main__":
     # Convert the PostScript file to PDF
     subprocess.run(["ps2pdf", pcal_filename.replace('.txt', '.ps'), pcal_filename.replace('.txt', '.pdf')])
 
+    # delete the PostScript file
+    subprocess.run(["rm", pcal_filename.replace('.txt', '.ps')])
+    # delete the CSV file
+    subprocess.run(["rm", downloaded_filename])
+    # delete the pcal file
+    subprocess.run(["rm", pcal_filename])
+
     # Print a message indicating the PDF file creation
-    print(f"PDF file created: {pcal_filename.replace('.txt', '.pdf')}")
+    logging.info(f"PDF file created: {pcal_filename.replace('.txt', '.pdf')}")
     # call the shell command to create the calendar page
-
-

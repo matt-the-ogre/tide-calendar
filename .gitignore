@@ -134,6 +134,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+tide-env/
 
 # Spyder project settings
 .spyderproject
